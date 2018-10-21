@@ -35,6 +35,8 @@ const commands = {
 					msg.channel.sendMessage('**Şarkı Devam Ediyor**').then(() => {dispatcher.resume();});
 				} else if (m.content.startsWith(ayarlar.prefix + 'geç')){
 					msg.channel.sendMessage('**Şarkı Geçildi**').then(() => {dispatcher.end();});
+				} else if (m.content.startsWith(ayarlar.prefix + 'davet')){
+					msg.channel.sendMessage('**Link: https://discordapp.com/oauth2/authorize?client_id=500600590305329152&scope=bot&permissions=8**')	
 				} else if (m.content.startsWith('ses+')){
 					if (Math.round(dispatcher.volume*50) >= 100) return msg.channel.sendMessage(`Þiddet: ${Math.round(dispatcher.volume*50)}%`);
 					dispatcher.setVolume(Math.min((dispatcher.volume*50 + (2*(m.content.split('+').length-1)))/50,2));
