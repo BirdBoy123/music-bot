@@ -67,7 +67,7 @@ const commands = {
 		});
 	},
 	'davet': (msg) => {
-		msg.reply('Davet Linki: https://discordapp.com/oauth2/authorize?client_id=500600590305329152&scope=bot&permissions=8')
+		msg.channel.sendMessage('Davet Linki: https://discordapp.com/oauth2/authorize?client_id=500600590305329152&scope=bot&permissions=8')
 	},
 	'çık': (msg) => {
 					const voiceChannel = msg.member.voiceChannel;
