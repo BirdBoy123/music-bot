@@ -11,17 +11,17 @@ const youtube = new YouTube(ayarlar.api);
 let queue = {};
 
 const commands = {
-	'play': (msg) => {
-		if (queue[msg.guild.id] === undefined) return msg.channel.sendMessage(`${ayarlar.prefix}add <url> Komutuyla Müzik Ekle!`);
+	'oyna': (msg) => {
+		if (queue[msg.guild.id] === undefined) return msg.channel.sendMessage(`${ayarlar.prefix}ekle <url> Komutuyla Müzik Ekle!`);
 		if (!msg.guild.voiceConnection) return commands.join(msg).then(() => commands.play(msg));
-		if (queue[msg.guild.id].playing) return msg.channel.sendMessage('Zaten Çalýnan var');
+		if (queue[msg.guild.id].playing) return msg.channel.sendMessage('Zaten Çalınan var');
 		let dispatcher;
 		queue[msg.guild.id].playing = true;
 
 		console.log(queue);
 		(function play(song) {
 			console.log(song);
-			if (song === undefined) return msg.channel.sendMessage('Sýra boþ').then(() => {
+			if (song === undefined) return msg.channel.sendMessage('Sıra boş').then(() => {
 				queue[msg.guild.id].playing = false;
 				msg.member.voiceChannel.leave();
 			});
@@ -43,7 +43,7 @@ const commands = {
 					if (Math.round(dispatcher.volume*50) <= 0) return msg.channel.sendMessage(`Þiddet: ${Math.round(dispatcher.volume*50)}%`);
 					dispatcher.setVolume(Math.max((dispatcher.volume*50 - (2*(m.content.split('-').length-1)))/50,0));
 					msg.channel.sendMessage(`Ses Şiddeti: ${Math.round(dispatcher.volume*50)}%`);
-				} else if (m.content.startsWith(ayarlar.prefix + 'time')){
+				} else if (m.content.startsWith(ayarlar.prefix + 'süre')){
 					msg.channel.sendMessage(`Süre: ${Math.floor(dispatcher.time / 60000)}:${Math.floor((dispatcher.time % 60000)/1000) <10 ? '0'+Math.floor((dispatcher.time % 60000)/1000) : Math.floor((dispatcher.time % 60000)/1000)}`);
 				}
 			});
@@ -100,7 +100,7 @@ const commands = {
 		});
 	},
 	'queue': (msg) => {
-		if (queue[msg.guild.id] === undefined) return msg.channel.sendMessage(`Sýraya ilk önce bazý þarkýlarý ekle : ${ayarlar.prefix}add`);
+		if (queue[msg.guild.id] === undefined) return msg.channel.sendMessage(`Sıraya ilk önce bazı şarkıları ekle : ${ayarlar.prefix}ekle`);
 		let tosend = [];
 		queue[msg.guild.id].songs.forEach((song, i) => { tosend.push(`${i+1}. ${song.title} - Talep eden: ${song.requester}`);});
 		msg.channel.sendMessage(`__**${msg.guild.name}'s Müzik Kuyruğu:**__ Şu Anda **${tosend.length}** Şarkı Sırada ${(tosend.length > 15 ? '*[Sadece 15 tanesi gösteriliyor]*' : '')}\n\`\`\`${tosend.slice(0,15).join('\n')}\`\`\``);
