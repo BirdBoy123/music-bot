@@ -12,39 +12,39 @@ let queue = {};
 
 const commands = {
 	'play': (msg) => {
-		if (queue[msg.guild.id] === undefined) return msg.channel.sendMessage(`${ayarlar.prefix}add <url> ile birkaç müzik ekle`);
+		if (queue[msg.guild.id] === undefined) return msg.channel.sendMessage(`${ayarlar.prefix}add <url> Komutuyla MÃ¼zik Ekle!`);
 		if (!msg.guild.voiceConnection) return commands.join(msg).then(() => commands.play(msg));
-		if (queue[msg.guild.id].playing) return msg.channel.sendMessage('Zaten Çalınan var');
+		if (queue[msg.guild.id].playing) return msg.channel.sendMessage('Zaten Ã‡alÃ½nan var');
 		let dispatcher;
 		queue[msg.guild.id].playing = true;
 
 		console.log(queue);
 		(function play(song) {
 			console.log(song);
-			if (song === undefined) return msg.channel.sendMessage('Sıra boş').then(() => {
+			if (song === undefined) return msg.channel.sendMessage('SÃ½ra boÃ¾').then(() => {
 				queue[msg.guild.id].playing = false;
 				msg.member.voiceChannel.leave();
 			});
-			msg.channel.sendMessage(`Çalınan: **${song.title}** talep eden: **${song.requester}**`);
+			msg.channel.sendMessage(`Ã‡alÄ±nan ÅarkÄ±: **${song.title}** Talep Eden KiÅŸi: **${song.requester}**`);
 			dispatcher = msg.guild.voiceConnection.playStream(yt(song.url, { audioonly: true }), { passes : ayarlar.passes });
 			let collector = msg.channel.createCollector(m => m);
 			collector.on('message', m => {
-				if (m.content.startsWith(ayarlar.prefix + 'pause')) {
-					msg.channel.sendMessage('**durduruldu**').then(() => {dispatcher.pause();});
-				} else if (m.content.startsWith(ayarlar.prefix + 'resume')){
-					msg.channel.sendMessage('**devam ediyor**').then(() => {dispatcher.resume();});
-				} else if (m.content.startsWith(ayarlar.prefix + 'skip')){
-					msg.channel.sendMessage('**geçildi**').then(() => {dispatcher.end();});
-				} else if (m.content.startsWith('volume+')){
-					if (Math.round(dispatcher.volume*50) >= 100) return msg.channel.sendMessage(`Şiddet: ${Math.round(dispatcher.volume*50)}%`);
+				if (m.content.startsWith(ayarlar.prefix + 'durdur')) {
+					msg.channel.sendMessage('**ÅarkÄ± Durduruldu**').then(() => {dispatcher.pause();});
+				} else if (m.content.startsWith(ayarlar.prefix + 'devam')){
+					msg.channel.sendMessage('**ÅarkÄ± Devam Ediyor**').then(() => {dispatcher.resume();});
+				} else if (m.content.startsWith(ayarlar.prefix + 'geÃ§')){
+					msg.channel.sendMessage('**ÅarkÄ± GeÃ§ildi**').then(() => {dispatcher.end();});
+				} else if (m.content.startsWith('ses+')){
+					if (Math.round(dispatcher.volume*50) >= 100) return msg.channel.sendMessage(`Ãiddet: ${Math.round(dispatcher.volume*50)}%`);
 					dispatcher.setVolume(Math.min((dispatcher.volume*50 + (2*(m.content.split('+').length-1)))/50,2));
-					msg.channel.sendMessage(`Şiddet: ${Math.round(dispatcher.volume*50)}%`);
-				} else if (m.content.startsWith('volume-')){
-					if (Math.round(dispatcher.volume*50) <= 0) return msg.channel.sendMessage(`Şiddet: ${Math.round(dispatcher.volume*50)}%`);
+					msg.channel.sendMessage(`Ses Åiddeti: ${Math.round(dispatcher.volume*50)}%`);
+				} else if (m.content.startsWith('ses-')){
+					if (Math.round(dispatcher.volume*50) <= 0) return msg.channel.sendMessage(`Ãiddet: ${Math.round(dispatcher.volume*50)}%`);
 					dispatcher.setVolume(Math.max((dispatcher.volume*50 - (2*(m.content.split('-').length-1)))/50,0));
-					msg.channel.sendMessage(`Şiddet: ${Math.round(dispatcher.volume*50)}%`);
+					msg.channel.sendMessage(`Ses Åiddeti: ${Math.round(dispatcher.volume*50)}%`);
 				} else if (m.content.startsWith(ayarlar.prefix + 'time')){
-					msg.channel.sendMessage(`Süre: ${Math.floor(dispatcher.time / 60000)}:${Math.floor((dispatcher.time % 60000)/1000) <10 ? '0'+Math.floor((dispatcher.time % 60000)/1000) : Math.floor((dispatcher.time % 60000)/1000)}`);
+					msg.channel.sendMessage(`SÃ¼re: ${Math.floor(dispatcher.time / 60000)}:${Math.floor((dispatcher.time % 60000)/1000) <10 ? '0'+Math.floor((dispatcher.time % 60000)/1000) : Math.floor((dispatcher.time % 60000)/1000)}`);
 				}
 			});
 			dispatcher.on('end', () => {
@@ -62,7 +62,7 @@ const commands = {
 	'join': (msg) => {
 		return new Promise((resolve, reject) => {
 			const voiceChannel = msg.member.voiceChannel;
-			if (!voiceChannel || voiceChannel.type !== 'voice') return msg.reply('Bir kanala katıl.');
+			if (!voiceChannel || voiceChannel.type !== 'voice') return msg.reply('Bir kanala katÃ½l.');
 			voiceChannel.join().then(connection => resolve(connection)).catch(err => reject(err));
 		});
 	},
@@ -85,30 +85,30 @@ const commands = {
 				var video = await youtube.getVideoByID(videos[0].id)
 			} catch (err) {
 				console.log(err)
-				message.channel.send('Bir hata oluştu: ' + err)
+				message.channel.send('Bir hata oluÅŸtu: ' + err)
 			};
 		};
 		
 		var url = `https://www.youtube.com/watch?v=${video.id}`
 		
-		if (url == '' || url === undefined) return msg.channel.sendMessage(`Bir YouTube linki eklemek için ${ayarlar.prefix}add <url> yazınız`);
+		if (url == '' || url === undefined) return msg.channel.sendMessage(`Bir YouTube linki eklemek iÃ§in ${ayarlar.prefix}add <url> yazÃ½nÃ½z`);
 		yt.getInfo(url, (err, info) => {
-			if(err) return msg.channel.sendMessage('Geçersiz YouTube Bağlantısı: ' + err);
+			if(err) return msg.channel.sendMessage('GeÃ§ersiz YouTube BaÄŸlantÄ±sÄ±: ' + err);
 			if (!queue.hasOwnProperty(msg.guild.id)) queue[msg.guild.id] = {}, queue[msg.guild.id].playing = false, queue[msg.guild.id].songs = [];
 			queue[msg.guild.id].songs.push({url: url, title: info.title, requester: msg.author.username});
-			msg.channel.sendMessage(`sıraya **${info.title}** eklendi`);
+			msg.channel.sendMessage(`SÄ±raya **${info.title}** AdlÄ± ÅarkÄ± Eklendi`);
 		});
 	},
 	'queue': (msg) => {
-		if (queue[msg.guild.id] === undefined) return msg.channel.sendMessage(`Sıraya ilk önce bazı şarkıları ekle : ${ayarlar.prefix}add`);
+		if (queue[msg.guild.id] === undefined) return msg.channel.sendMessage(`SÃ½raya ilk Ã¶nce bazÃ½ Ã¾arkÃ½larÃ½ ekle : ${ayarlar.prefix}add`);
 		let tosend = [];
 		queue[msg.guild.id].songs.forEach((song, i) => { tosend.push(`${i+1}. ${song.title} - Talep eden: ${song.requester}`);});
-		msg.channel.sendMessage(`__**${msg.guild.name}'s Müzik Kuyruğu:**__ Şu anda **${tosend.length}** şarkı sırada ${(tosend.length > 15 ? '*[Sadece 15 tanesi gösteriliyor]*' : '')}\n\`\`\`${tosend.slice(0,15).join('\n')}\`\`\``);
+		msg.channel.sendMessage(`__**${msg.guild.name}'s MÃ¼zik KuyruÄŸu:**__ Åu Anda **${tosend.length}** ÅarkÄ± SÄ±rada ${(tosend.length > 15 ? '*[Sadece 15 tanesi gÃ¶steriliyor]*' : '')}\n\`\`\`${tosend.slice(0,15).join('\n')}\`\`\``);
 	}
 };
 
 client.on('ready', () => {
-	console.log('BOT: Bot hazır.');
+	console.log('BOT: Bot hazÄ±r.');
 });
 
 client.on('message', msg => {
