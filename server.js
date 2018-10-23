@@ -66,9 +66,6 @@ const commands = {
 			voiceChannel.join().then(connection => resolve(connection)).catch(err => reject(err));
 		});
 	},
-	'davet': (msg) => {
-		msg.channel.sendMessage('Davet Linki: https://discordapp.com/oauth2/authorize?client_id=500600590305329152&scope=bot&permissions=8')
-	},
 	'çık': (msg) => {
 					const voiceChannel = msg.member.voiceChannel;
 
